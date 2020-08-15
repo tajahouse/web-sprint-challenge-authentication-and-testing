@@ -15,4 +15,10 @@ server.use(express.json());
 server.use('/api/auth', authRouter);
 server.use('/api/jokes', authenticate, jokesRouter);
 
+server.use("/", (req, res) => {
+    res.json({
+      message: `🐶 You're barking up the right 🌴`,
+    });
+  });
+
 module.exports = server;
