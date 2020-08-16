@@ -2,9 +2,17 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const auth = require('../users/usersModel')
-const restrict = require('./authenticate-middleware');
+const amw = require('./authenticate-middleware');
 
-router.post('/register', async (req, res, next) => {
+router.get('/users',  async (req, res, next) =>{
+		try {
+			res.json(await auth.find())
+		} catch (err){
+			next(err)
+		}
+})
+
+router.post('/register', amw.regValid,  async (req, res, next) => {
   try{
     const { username, password } = req.body
     const user = await auth.findBy({ username }).first()
@@ -25,36 +33,41 @@ router.post('/register', async (req, res, next) => {
 
 });
 
-router.post('/login', async (req, res, next) => {
-  try {
-		const { username, password } = req.body
-		const user = await auth.findBy({ username }).first()
-		
-		if (!user) {
-			return res.status(401).json({
-				message: "Invalid Credentials",
-			})
-		}
-		const passwordValid = await bcrypt.compare(password, user.password)
 
-		if (!passwordValid) {
-			return res.status(401).json({
-				message: "Invalid Credentials",
-			})
-		}
-     
-        const payload = {
-                userId: user.id,
-                uername: user.username,
+router.post('/login', async (req, res, next) => {
+    try {
+        const { username, password } = req.body
+        const user = await auth.findBy({ username }).first()
+
+        if (!user) {
+            return res.status(400).json({
+                message: "Invalid Credentials",
+            })
         }
 
-		res.json({
+        const passwordValid = await bcrypt.compare(password, user.password)
+
+        if (!passwordValid) {
+            return res.status(400).json({
+                message: "Invalid Credentials",
+            })
+        }
+
+        const payload = {
+            userId: user.id,
+			username: user.username,
+			role: 'user'
+        }
+
+        res.cookie("token", jwt.sign(payload,  process.env.JWT_SECRET || "Seven Deadly Sins"))
+        const token = jwt.sign(payload,  process.env.JWT_SECRET || "Seven Deadly Sins")
+        res.json({
             message: `Welcome ${user.username}!`,
-            token: jwt.sign(payload, "all mine, not yours"),
-		})
-	} catch(err) {
-		next(err)
-	}
+            token: token //included for testing purposes only
+        })
+    } catch (err) {
+        next(err)
+    }
 });
 
 router.get("/logout", async (req, res, next) => {
