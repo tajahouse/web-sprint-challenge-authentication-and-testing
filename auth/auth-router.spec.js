@@ -18,17 +18,17 @@ describe('auth-router.js', () => {
     });
 });
 
-describe('dadjokes.js', () => {
-    describe('GET /', () => {
-        let res = {};
-        beforeAll(async() => {
-            res = await (await request(server).get('/api/jokes')).auth(token, {type: ''});
-        });
+// describe('dadjokes.js', () => {
+//     describe('GET /', () => {
+//         let res = {};
+//         beforeAll(async() => {
+//             res = await (await request(server).get('/api/jokes')).auth(token, {type: ''});
+//         });
 
-        it('should return 200 ok', () => {
-            expect(res.status).toBe(200);
-        });
-    });
-});
+//         it('should return 200 ok', () => {
+//             expect(res.status).toBe(200);
+//         });
+//     });
+// });
 
 
