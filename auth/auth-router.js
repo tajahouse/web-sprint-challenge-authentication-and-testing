@@ -12,7 +12,7 @@ router.get("/users", amw.restrict("normal"), async (req, res, next) => {
   }
 });
 
-router.post("/register", amw.regValid, async (req, res, next) => {
+router.post("/register", amw.valid, async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const user = await auth.findBy({ username }).first();

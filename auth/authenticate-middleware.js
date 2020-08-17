@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 // const roles = [ 'normal', 'admin' ]
-function regValid(req, res, next) {
+function valid (req, res, next) {
 	if (req.body && req.body.username && req.body.password) {
 		next()
 	} else {
@@ -35,4 +35,4 @@ function restrict() {
 		}
 	}
 }
-module.exports = { regValid, restrict }
+module.exports = {  valid , restrict }

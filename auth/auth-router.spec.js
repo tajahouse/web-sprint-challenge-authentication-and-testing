@@ -18,17 +18,16 @@ describe('auth-router.js', () => {
     });
 });
 
-// describe('dadjokes.js', () => {
-//     describe('GET /', () => {
-//         let res = {};
-//         beforeAll(async() => {
-//             res = await (await request(server).get('/api/jokes')).auth(token, {type: ''});
-//         });
+describe('dad jokes', () =>{
+    test('GET /',  async () =>{
+        const res = await request(server).get('/api/jokes')
+        expect(res.statusCode).toBe(401)
+    })
+    test('type', async() =>{
+        const res = await request(server).get('/api/jokes')
+        expect(res.type).toBe("application/json")
+    })
+})
 
-//         it('should return 200 ok', () => {
-//             expect(res.status).toBe(200);
-//         });
-//     });
-// });
 
 
